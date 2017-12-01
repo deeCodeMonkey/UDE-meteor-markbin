@@ -1,20 +1,25 @@
-﻿import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+﻿import React, { Component, PropTypes } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 
 
 import Accounts from './accounts';
 
+
 class Header extends Component {
 
-    onBinClick(e){
+    constructor(props) {
+        super(props)
+        this.onBinClick = this.onBinClick.bind(this);
+    }
+
+    onBinClick(e) {
         e.preventDefault();
         //call meteor method
         //need to import to main on server and client side to work
         Meteor.call('bins.insert', (err, binId) => {
-            //History.push(`/bins/${binID}`)
-            console.log(binId);
+            this.props.history.push(`/bins/${binId}`)
         });
-    }    
+    }
 
     render() {
         return (
@@ -24,10 +29,10 @@ class Header extends Component {
                 </div>
                 <ul className='nav navbar-nav'>
                     <li>
-                        <Accounts/>
+                        <Accounts />
                     </li>
                     <li>
-                        <a href='#' onClick={this.onBinClick.bind(this)}>Create Bin</a>
+                        <a href='#' onClick={this.onBinClick}>Create Bin</a>
                     </li>
                 </ul>
             </nav>
@@ -35,4 +40,4 @@ class Header extends Component {
     }
 }
 
-export default Header;
+export default withRouter(Header);
